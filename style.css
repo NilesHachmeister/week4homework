@@ -1,0 +1,43 @@
+
+header{
+    font-size: 15px;
+    color: grey;
+}
+
+#timer{
+    float: right;
+}
+main{
+padding-left: 35%;
+padding-right: 35%;
+}
+
+.answer{
+    color: red;
+    background-color: purple;
+    border-radius: 2px;
+    margin: 2px;
+    width: 50%;
+    
+}
+
+
+button{
+    background-color: purple;
+    color: white;
+    height: 30px;
+}
+
+
+
+
+/*
+style highscores and time
+
+style question
+
+style list item answers
+
+style break and "wrong" or "correct" bellow the break
+
+style high scores screen
