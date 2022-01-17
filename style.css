@@ -12,10 +12,10 @@ padding-left: 35%;
 padding-right: 35%;
 }
 
-.answer{
-    color: red;
+.answer-option{
+    color: white;
     background-color: purple;
-    border-radius: 2px;
+    border-radius: 5px;
     margin: 2px;
     width: 50%;
     
@@ -28,6 +28,11 @@ button{
     height: 30px;
 }
 
+
+#test{
+    color: green;
+    font-size: 40px;
+}
 
 
 
