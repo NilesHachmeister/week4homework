@@ -13,7 +13,7 @@ let outcome;
 let finalScore;
 let finalScoreInput;
 
-
+let timerInterval;
 
 
 let lastQuestionReached = false;
@@ -26,6 +26,17 @@ let clearButton;
 
 let highscoreViewed = false;
 let initials = [];
+let score = [];
+let highscoreBoard = [];
+
+let correctness = false;
+
+let liOnPage = false;
+
+let outcomeShoweing = false;
+
+let highscoreDisplay = [];
+
 
 
 const opener = ["Coding Quize Challenge", "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"]
@@ -56,15 +67,17 @@ const q5 = ["A very useful tool used during development and debugging for printi
 var timeLeft = 60;
 
 function getTime() {
-    var timerInterval = setInterval(function () {
-        timer.textContent = timeLeft + " seconds left";
+    timerInterval = setInterval(function () {
         timeLeft--;
+
+        timer.textContent = "Time: " + timeLeft;
 
 
         if (timeLeft < 1) {
+            timeLeft = 0;
             clearInterval(timerInterval);
-            highScoreInput()
-        }
+            highScoreInput();
+        };
 
     }, 1000);
 }
@@ -73,12 +86,17 @@ function getTime() {
 
 
 function init() {
+    lastQuestionReached = false;
+
+
+    initials = JSON.parse(localStorage.getItem("initials"));
+    score = JSON.parse(localStorage.getItem("score"));
+
 
     if (highscoreViewed) {
         backButton.remove();
         clearButton.remove();
-        highscore.textContent = "View Highscores"
-        timer.textContent = timeLeft + " seconds left";
+        highscoreList.remove();
     }
 
     if (highScoreReached) {
@@ -86,9 +104,10 @@ function init() {
         timer.remove();
         question.remove();
         outcome.remove();
-
+        highscoreList.remove();
     }
 
+    timeLeft = 60;
 
     highscore = document.createElement("span")
     highscore.textContent = "View Highscores"
@@ -98,7 +117,7 @@ function init() {
 
 
     timer = document.createElement("span")
-    timer.textContent = timeLeft + " seconds left";
+    timer.textContent = "Time: " + timeLeft;
     header.appendChild(timer)
     timer.setAttribute("id", "timer")
 
@@ -125,7 +144,7 @@ function init() {
     answer.appendChild(startButton)
     highscore.addEventListener("click", highscorePage)
     startButton.addEventListener("click", function () {
-        directions.textContent = ""
+
         startButton.remove();
         directions.remove();
         quiz()
@@ -138,31 +157,61 @@ function init() {
 
 
 
-
 function quiz() {
     highscoreViewed = false;
     getTime()
     question1()
 
 
-}
-
-function correctAnswer() {
-    callOutcome();
-    outcome.textContent = "Correct!"
 
 }
 
-function wrongAnswer() {
-    callOutcome();
-    outcome.textContent = "Wrong!"
-    timeLeft -= 10;
+function checkAnswer() {
+
+    if (lastQuestionReached) {
+        if (timeLeft < 0) {
+            timeLeft = 0;
+        }
+        highScoreInput()
+    }
+
+    callOutcome()
+
+    outcomeShoweing = true;
+
+    if (correctness) {
+
+        outcome.textContent = "Correct!"
+    } else {
+        timeLeft -= 10;
+
+        outcome.textContent = "Wrong!"
+    }
+
+
+
+
+
+
+
 
 }
+
+
+
+
 
 
 
 function question1() {
+
+    highScoreReached = false;
+    highscoreViewed = false;
+
+
+
+
+
     question.textContent = q1[0];
     questionList = document.createElement("ol")
     li1 = document.createElement("div");
@@ -188,16 +237,18 @@ function question1() {
     questionList.appendChild(li4);
 
 
-
+    liOnPage = true;
 
 
 
     questionList.addEventListener("click", clickContenue = function (event) {
         var element = event.target
         if (element.textContent === q1[3]) {
-            correctAnswer()
+            correctness = true;
+            checkAnswer()
         } else {
-            wrongAnswer()
+            correctness = false;
+            checkAnswer()
         }
         questionList.removeEventListener("click", clickContenue)
         question2()
@@ -213,6 +264,9 @@ function question1() {
 function question2() {
 
 
+    highScoreReached = false;
+    highscoreViewed = false;
+
     question.textContent = q2[0];
     li1.textContent = q2[1]
     li2.textContent = q2[2]
@@ -223,21 +277,33 @@ function question2() {
 
 
     questionList.addEventListener("click", clickContenue = function (event) {
+        if (outcomeShoweing) {
+            outcome.remove()
+        }
+
         var element = event.target
         if (element.textContent === q2[3]) {
-            correctAnswer()
+            correctness = true;
+            checkAnswer()
         } else {
-            wrongAnswer()
+            correctness = false;
+            checkAnswer()
         }
         questionList.removeEventListener("click", clickContenue)
         question3()
+
     });
 
 
 
 }
 
+
 function question3() {
+
+
+    highScoreReached = false;
+    highscoreViewed = false;
 
 
     question.textContent = q3[0];
@@ -250,11 +316,18 @@ function question3() {
 
 
     questionList.addEventListener("click", clickContenue = function (event) {
+
+        if (outcomeShoweing) {
+            outcome.remove()
+        }
+
         var element = event.target
         if (element.textContent === q3[4]) {
-            correctAnswer()
+            correctness = true;
+            checkAnswer()
         } else {
-            wrongAnswer()
+            correctness = false;
+            checkAnswer()
         }
         questionList.removeEventListener("click", clickContenue)
         question4()
@@ -265,7 +338,8 @@ function question3() {
 
 function question4() {
 
-
+    highScoreReached = false;
+    highscoreViewed = false;
 
 
     question.textContent = q4[0];
@@ -278,11 +352,18 @@ function question4() {
 
 
     questionList.addEventListener("click", clickContenue = function (event) {
+
+        if (outcomeShoweing) {
+            outcome.remove()
+        }
+
         var element = event.target
         if (element.textContent === q4[3]) {
-            correctAnswer()
+            correctness = true;
+            checkAnswer()
         } else {
-            wrongAnswer()
+            correctness = false;
+            checkAnswer()
         }
         questionList.removeEventListener("click", clickContenue)
         question5()
@@ -296,6 +377,12 @@ function question4() {
 
 function question5() {
 
+
+    highScoreReached = false;
+    highscoreViewed = false;
+    lastQuestionReached = true;
+
+
     question.textContent = q5[0];
     li1.textContent = q5[1]
     li2.textContent = q5[2]
@@ -305,32 +392,46 @@ function question5() {
 
 
     questionList.addEventListener("click", clickContenue = function (event) {
+
+        if (outcomeShoweing) {
+            outcome.remove()
+        }
+
         var element = event.target
         if (element.textContent === q5[4]) {
-            highScoreInput()
-            correctAnswer()
+            correctness = true;
+            checkAnswer()
         } else {
-            highScoreInput()
-            wrongAnswer()
+            correctness = false;
+            checkAnswer()
         }
         questionList.removeEventListener("click", clickContenue)
 
     });
 
-    lastQuestionReached = true;
+
 
 
 }
 
 function callOutcome() {
+
+
+
     outcome = document.createElement("div")
     main.appendChild(outcome)
     outcome.setAttribute("id", "outcome")
 
-    setTimeout(() => { outcome.remove() }, 1000);
+    setTimeout(() => {
+        outcome.remove()
+        outcomeShoweing = false;
+    }, 1000);
+
 }
 
 function highscorePage() {
+
+
 
     if (highScoreReached) {
         initialButton.removeEventListener("click", clickContenue)
@@ -340,15 +441,28 @@ function highscorePage() {
         initialButton.remove();
         question.remove();
     } else {
-        directions.remove();
+
         question.remove();
+        timer.remove()
+
     }
 
+
+    directions.remove();
+
+    if (liOnPage) {
+        li1.remove()
+        li2.remove()
+        li3.remove()
+        li4.remove()
+
+    }
 
     renderHighscores()
 
 
     highscoreViewed = true;
+
 
 
     backButton = document.createElement("button")
@@ -364,7 +478,18 @@ function highscorePage() {
 
 
 
-    backButton.addEventListener("click", init)
+    backButton.addEventListener("click", function () {
+        location.reload();
+    })
+
+
+    clearButton.addEventListener("click", function () {
+
+        localStorage.clear();
+        initials = [];
+        score = [];
+        location.reload();
+    })
 
 
 }
@@ -373,11 +498,41 @@ function highscorePage() {
 
 function renderHighscores() {
 
-    var storedInitials = JSON.parse(localStorage.getItem("initials"));
 
-    if (storedInitials !== null) {
-        renderInitials = storedInitials;
+
+    for (var j = 0; j < score.length; j++)
+        highscoreBoard.push({ "score": score[j], "initials": initials[j] });
+
+
+
+    highscoreBoard.sort(function (a, b) {
+        return ((a.score < b.score) ? -1 : ((a.score == b.score) ? 0 : 1));
+    });
+
+    for (var k = 0; k < score.length; k++) {
+        score[k] = highscoreBoard[k].score;
+        initials[k] = highscoreBoard[k].initials;
+
     }
+
+
+    for (let index = 0; index < score.length; index++) {
+        highscoreDisplay[index] = score[index] + " " + initials[index];
+
+
+    }
+
+
+    highscoreDisplay.reverse()
+
+
+
+
+
+    localStorage.setItem("initials", JSON.stringify(initials));
+    localStorage.setItem("score", JSON.stringify(score));
+
+
 
 
 
@@ -387,10 +542,10 @@ function renderHighscores() {
     highscoreList.setAttribute("id", "high-score-list")
 
 
-    for (var i = 0; i < storedInitials.length; i++) {
+    for (var i = 0; i < highscoreDisplay.length; i++) {
 
         let li = document.createElement("li");
-        li.textContent = renderInitials[i];
+        li.textContent = highscoreDisplay[i];
         li.setAttribute("data-index", i);
 
 
@@ -406,6 +561,15 @@ function renderHighscores() {
 
 
 function highScoreInput() {
+    clearInterval(timerInterval);
+    timer.textContent = "Time: " + timeLeft;
+
+    liOnPage = false;
+    answer.remove()
+
+
+
+
     highScoreReached = true;
     question.textContent = "All done!";
 
@@ -431,21 +595,26 @@ function highScoreInput() {
 
     initialButton.textContent = "Submit"
 
-    answer.remove()
+
+
+
+
+
+    callOutcome()
 
 
     initialButton.addEventListener("click", clickContenue = function () {
         let newInitials = initialInput.value.trim()
         if (newInitials.length > 1 && newInitials.length < 4) {
 
-            initials.push(newInitials);
-            localStorage.setItem("initials", JSON.stringify(initials));
 
 
+            initials = initials || [];
+            initials.push(newInitials)
 
+            score = score || [];
+            score.push(timeLeft)
 
-            console.log(initials);
-            console.log(localStorage);
 
 
             highscorePage()
@@ -464,8 +633,12 @@ function highScoreInput() {
 
 init()
 
-// save data
-
-// sort data
 
 // timer kicks out of everything
+
+
+//clear history restarts that page
+
+
+
+//fix outcomes
