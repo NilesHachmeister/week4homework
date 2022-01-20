@@ -10,15 +10,18 @@ header{
 main{
 padding-left: 35%;
 padding-right: 35%;
+text-align: left;
 }
 
 .answer-option{
     color: white;
     background-color: purple;
     border-radius: 5px;
-    margin: 2px;
-    width: 50%;
-    
+
+    width: initial;
+    text-align: left;
+   padding: 4px;
+
 }
 
 
@@ -28,12 +31,66 @@ button{
     height: 30px;
 }
 
-
-#test{
-    color: green;
-    font-size: 40px;
+#answer-list{
+    list-style-type: none;
+    padding-left: 0;
 }
 
+
+#outcome{
+    color: grey;
+    border-top: grey solid 2px;
+    padding-top: 10px;
+}
+
+.high-score-item {
+    background-color: lightgrey;
+    font-weight: bold;
+}
+
+
+ol li{
+    list-style-type: none;
+margin-top: 10px;
+margin-left: 0;
+font-weight: 100;
+font-size: 15px;
+}
+
+#high-score-list{
+    font-weight: bold;
+    font-size: 25px;
+}
+
+#new{
+    color: red;
+}
+.highscore-button{
+    margin-left: 25px;
+}
+
+.directions{
+   
+font-size: 20px;
+}
+
+
+#open-page{
+
+    text-align: center;
+}
+
+#start-button{
+display: block;
+    margin-top: 15px;
+    margin-left: 40%;
+}
+
+
+#final-score{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 
 /*

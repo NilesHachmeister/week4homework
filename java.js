@@ -1,21 +1,19 @@
+
+// this gets the element of the header and main. that way i am able to manipulate them
 let header = document.querySelector("header")
 let main = document.querySelector("main")
 
-
+// these are my variable declarations I opted for most variables to be global that way I can manipulate them no matter what function I was working within.
 let timer;
 let highscore;
 let question;
 let directions;
-
 let answer;
-
 let outcome;
 let finalScore;
 let finalScoreInput;
-
 let timerInterval;
-
-
+let timeOut;
 let lastQuestionReached = false;
 let highScoreReached = false;
 let questionList = "";
@@ -23,22 +21,23 @@ let clickContenue;
 let startButton;
 let backButton;
 let clearButton;
-
 let highscoreViewed = false;
 let initials = [];
 let score = [];
 let highscoreBoard = [];
-
 let correctness = false;
-
 let liOnPage = false;
-
 let outcomeShoweing = false;
-
 let highscoreDisplay = [];
+let invalidTruth = false;
+let newInitials = "";
+let newScore = "";
+let count = 0;
+let initialLengthCorrect = false;
 
 
 
+// these are my arrays. I put all of the questions and answers in arrays to make them easier to load.
 const opener = ["Coding Quize Challenge", "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"]
 const q1 = ["Commonly used data types DO NOT include:", "1. strings", "2. booleans", "3. alerts", "4. numbers"]
 const q2 = ["The condition in an if / else statement is enclosed within ____.", "1. quotes", "2. curley brackets", "3. parentheses", "4. square brackets"]
@@ -46,33 +45,15 @@ const q3 = ["Array in JavaScript can be used to store____.", "1. numbers and str
 const q4 = ["String values must be enclosed within ___ when being assigned to variables", "1. commmas", "2. curley brackets", "3. quotes", "4. parentheses"]
 const q5 = ["A very useful tool used during development and debugging for printing content to the debugger is:", "1. JavaScript", "2. terminal/bash", "3. for loops", "4. console log"]
 
+const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 
-
-//create timer
-
-// create an object with question and array of asnwers 
-
-//append the page based on the question number
-
-//append the page based on correct or false
-
-// save the correct/wrong inputs into a counter
-
-//have them input their initials and save the initials and score to localstorage and output when clicked on
-
-
-
-
+// this is my timer ive declared timeLeft which will be used throught the file. The timer manipulates the time and if the timeLeft hits 0 it will go to the highscore input.
 var timeLeft = 60;
-
 function getTime() {
     timerInterval = setInterval(function () {
         timeLeft--;
-
         timer.textContent = "Time: " + timeLeft;
-
-
         if (timeLeft < 1) {
             timeLeft = 0;
             clearInterval(timerInterval);
@@ -84,8 +65,9 @@ function getTime() {
 
 
 
-
+// this function boots on initialzation. 
 function init() {
+    // this is setting lastQuestionReached to false 
     lastQuestionReached = false;
 
 
@@ -109,6 +91,8 @@ function init() {
 
     timeLeft = 60;
 
+
+
     highscore = document.createElement("span")
     highscore.textContent = "View Highscores"
     header.appendChild(highscore)
@@ -121,30 +105,38 @@ function init() {
     header.appendChild(timer)
     timer.setAttribute("id", "timer")
 
+
+    let openPage = document.createElement("div")
+    main.appendChild(openPage)
+    openPage.setAttribute("id", "open-page")
+
     question = document.createElement("h1")
     question.textContent = opener[0]
-    main.appendChild(question)
-    question.setAttribute("id", "question")
+    openPage.appendChild(question)
+
 
 
 
     directions = document.createElement("span")
     directions.textContent = opener[1]
-    main.appendChild(directions)
-    directions.setAttribute("id", "directions")
+    openPage.appendChild(directions)
+    directions.setAttribute("class", "directions")
 
 
-    answer = document.createElement("div")
-    main.appendChild(answer)
-    answer.setAttribute("id", "answer")
+
+
 
 
     startButton = document.createElement("button")
     startButton.textContent = "Start Quiz "
-    answer.appendChild(startButton)
+    openPage.appendChild(startButton)
+    startButton.setAttribute("id", "start-button")
+
+
+
     highscore.addEventListener("click", highscorePage)
     startButton.addEventListener("click", function () {
-
+        openPage.remove()
         startButton.remove();
         directions.remove();
         quiz()
@@ -163,7 +155,6 @@ function quiz() {
     question1()
 
 
-
 }
 
 function checkAnswer() {
@@ -172,29 +163,28 @@ function checkAnswer() {
         if (timeLeft < 0) {
             timeLeft = 0;
         }
+
         highScoreInput()
-    }
+        callOutcome()
 
-    callOutcome()
 
-    outcomeShoweing = true;
+        if (correctness) {
+            outcome.textContent = "Correct!"
+        } else {
+            timeLeft -= 10;
+            outcome.textContent = "Wrong!"
+        }
 
-    if (correctness) {
-
-        outcome.textContent = "Correct!"
     } else {
-        timeLeft -= 10;
-
-        outcome.textContent = "Wrong!"
+        callOutcome()
+        outcomeShoweing = true;
+        if (correctness) {
+            outcome.textContent = "Correct!"
+        } else {
+            timeLeft -= 10;
+            outcome.textContent = "Wrong!"
+        }
     }
-
-
-
-
-
-
-
-
 }
 
 
@@ -207,17 +197,45 @@ function question1() {
 
     highScoreReached = false;
     highscoreViewed = false;
+    liOnPage = true;
+
+    question = document.createElement("h1")
+
+    main.appendChild(question)
 
 
-
+    answer = document.createElement("div")
+    main.appendChild(answer)
+    answer.setAttribute("id", "answer")
 
 
     question.textContent = q1[0];
-    questionList = document.createElement("ol")
-    li1 = document.createElement("div");
-    li2 = document.createElement("div");
-    li3 = document.createElement("div");
-    li4 = document.createElement("div");
+    questionList = document.createElement("ul")
+    questionList.setAttribute("id", "answer-list")
+
+
+    holder1 = document.createElement("li");
+    holder2 = document.createElement("li");
+    holder3 = document.createElement("li");
+    holder4 = document.createElement("li");
+
+    holder1.setAttribute("style", "margin-top: 10px")
+    holder2.setAttribute("style", "margin-top: 10px")
+    holder3.setAttribute("style", "margin-top: 10px")
+    holder4.setAttribute("style", "margin-top: 10px")
+
+    li1 = document.createElement("span");
+    li2 = document.createElement("span");
+    li3 = document.createElement("span");
+    li4 = document.createElement("span");
+
+
+
+    holder1.appendChild(li1);
+    holder2.appendChild(li2);
+    holder3.appendChild(li3);
+    holder4.appendChild(li4);
+
 
     li1.setAttribute("class", "answer-option")
     li2.setAttribute("class", "answer-option")
@@ -231,13 +249,12 @@ function question1() {
     li4.textContent = q1[4]
 
     answer.appendChild(questionList);
-    questionList.appendChild(li1);
-    questionList.appendChild(li2);
-    questionList.appendChild(li3);
-    questionList.appendChild(li4);
+    questionList.appendChild(holder1);
+    questionList.appendChild(holder2);
+    questionList.appendChild(holder3);
+    questionList.appendChild(holder4);
 
 
-    liOnPage = true;
 
 
 
@@ -263,10 +280,6 @@ function question1() {
 
 function question2() {
 
-
-    highScoreReached = false;
-    highscoreViewed = false;
-
     question.textContent = q2[0];
     li1.textContent = q2[1]
     li2.textContent = q2[2]
@@ -274,11 +287,11 @@ function question2() {
     li4.textContent = q2[4]
 
 
-
-
     questionList.addEventListener("click", clickContenue = function (event) {
+
         if (outcomeShoweing) {
             outcome.remove()
+            window.clearTimeout(timeOut)
         }
 
         var element = event.target
@@ -301,11 +314,6 @@ function question2() {
 
 function question3() {
 
-
-    highScoreReached = false;
-    highscoreViewed = false;
-
-
     question.textContent = q3[0];
     li1.textContent = q3[1]
     li2.textContent = q3[2]
@@ -319,6 +327,7 @@ function question3() {
 
         if (outcomeShoweing) {
             outcome.remove()
+            window.clearTimeout(timeOut)
         }
 
         var element = event.target
@@ -338,10 +347,6 @@ function question3() {
 
 function question4() {
 
-    highScoreReached = false;
-    highscoreViewed = false;
-
-
     question.textContent = q4[0];
     li1.textContent = q4[1]
     li2.textContent = q4[2]
@@ -349,12 +354,11 @@ function question4() {
     li4.textContent = q4[4]
 
 
-
-
     questionList.addEventListener("click", clickContenue = function (event) {
 
         if (outcomeShoweing) {
             outcome.remove()
+            window.clearTimeout(timeOut)
         }
 
         var element = event.target
@@ -373,28 +377,22 @@ function question4() {
 
 
 
-
-
 function question5() {
-
 
     highScoreReached = false;
     highscoreViewed = false;
     lastQuestionReached = true;
-
 
     question.textContent = q5[0];
     li1.textContent = q5[1]
     li2.textContent = q5[2]
     li3.textContent = q5[3]
     li4.textContent = q5[4]
-
-
-
     questionList.addEventListener("click", clickContenue = function (event) {
 
         if (outcomeShoweing) {
             outcome.remove()
+            window.clearTimeout(timeOut)
         }
 
         var element = event.target
@@ -416,13 +414,11 @@ function question5() {
 
 function callOutcome() {
 
-
-
     outcome = document.createElement("div")
     main.appendChild(outcome)
     outcome.setAttribute("id", "outcome")
 
-    setTimeout(() => {
+    timeOut = setTimeout(() => {
         outcome.remove()
         outcomeShoweing = false;
     }, 1000);
@@ -431,7 +427,10 @@ function callOutcome() {
 
 function highscorePage() {
 
-
+    if (invalidTruth) {
+        invalidIn.remove();
+        invalidTruth = false;
+    }
 
     if (highScoreReached) {
         initialButton.removeEventListener("click", clickContenue)
@@ -461,16 +460,21 @@ function highscorePage() {
     renderHighscores()
 
 
+
     highscoreViewed = true;
+
+
 
 
 
     backButton = document.createElement("button")
     backButton.textContent = "Go Back"
+    backButton.setAttribute("class", "highscore-button")
     main.appendChild(backButton)
 
     clearButton = document.createElement("button")
     clearButton.textContent = "Clear History"
+    clearButton.setAttribute("class", "highscore-button")
     main.appendChild(clearButton)
 
     highscore.remove()
@@ -489,6 +493,7 @@ function highscorePage() {
         initials = [];
         score = [];
         location.reload();
+
     })
 
 
@@ -498,34 +503,32 @@ function highscorePage() {
 
 function renderHighscores() {
 
+    if (score != undefined) {
+        for (var j = 0; j < score.length; j++)
+            highscoreBoard.push({ "score": score[j], "initials": initials[j] });
 
 
-    for (var j = 0; j < score.length; j++)
-        highscoreBoard.push({ "score": score[j], "initials": initials[j] });
+
+        highscoreBoard.sort(function (a, b) {
+            return ((a.score < b.score) ? -1 : ((a.score == b.score) ? 0 : 1));
+        });
+
+        for (var k = 0; k < score.length; k++) {
+            score[k] = highscoreBoard[k].score;
+            initials[k] = highscoreBoard[k].initials;
+
+        }
 
 
+        for (let index = 0; index < score.length; index++) {
+            highscoreDisplay[index] = initials[index] + " -  " + score[index];
 
-    highscoreBoard.sort(function (a, b) {
-        return ((a.score < b.score) ? -1 : ((a.score == b.score) ? 0 : 1));
-    });
 
-    for (var k = 0; k < score.length; k++) {
-        score[k] = highscoreBoard[k].score;
-        initials[k] = highscoreBoard[k].initials;
+        }
+
+        highscoreDisplay.reverse()
 
     }
-
-
-    for (let index = 0; index < score.length; index++) {
-        highscoreDisplay[index] = score[index] + " " + initials[index];
-
-
-    }
-
-
-    highscoreDisplay.reverse()
-
-
 
 
 
@@ -544,18 +547,24 @@ function renderHighscores() {
 
     for (var i = 0; i < highscoreDisplay.length; i++) {
 
+        let div = document.createElement("div")
         let li = document.createElement("li");
-        li.textContent = highscoreDisplay[i];
-        li.setAttribute("data-index", i);
+        li.textContent = [i + 1] + ". " + highscoreDisplay[i];
+
+        if (highscoreDisplay[i] == newInitials + " -  " + newScore) {
+            div.setAttribute("class", "high-score-item");
+        }
 
 
-        highscoreList.appendChild(li);
 
 
+        highscoreList.appendChild(div)
 
-
+        div.appendChild(li);
 
     }
+
+
 
 }
 
@@ -585,10 +594,13 @@ function highScoreInput() {
     finalScore.textContent = "Your final score is " + timeLeft + " ";
     finalScoreInput.textContent = "Enter initials: "
     initialInput = document.createElement("input")
+    initialInput.placeholder = "Enter Initials";
+
     finalScoreInput.appendChild(initialInput)
 
     initialButton = document.createElement("button")
     finalScoreInput.appendChild(initialButton)
+
 
 
 
@@ -599,13 +611,30 @@ function highScoreInput() {
 
 
 
-
-    callOutcome()
-
-
     initialButton.addEventListener("click", clickContenue = function () {
-        let newInitials = initialInput.value.trim()
-        if (newInitials.length > 1 && newInitials.length < 4) {
+        newScore = timeLeft
+        newInitials = initialInput.value.trim()
+
+        let initialsSplit = newInitials.split("");
+        for (let i = 0; i < initialsSplit.length; i++) {
+            const element = initialsSplit[i];
+            console.log(initialsSplit)
+
+            if (alphabet.includes(element.toLowerCase())) {
+                count++
+            }
+
+        }
+
+        console.log(count)
+
+        if (count === initialsSplit.length) {
+            initialLengthCorrect = true;
+        }
+
+
+        if ((newInitials.length > 1 && newInitials.length < 4) && initialLengthCorrect) {
+
 
 
 
@@ -618,10 +647,22 @@ function highScoreInput() {
 
 
             highscorePage()
-        } else {
-            outcome.textContent = "Invalid initials, please enter 2 or 3 letters"
-            outcome.setAttribute("style", "color:red")
 
+
+        } else {
+
+            if (invalidTruth) {
+
+            } else {
+
+                invalidIn = document.createElement("div")
+                main.appendChild(invalidIn)
+                invalidIn.textContent = "Invalid initials, please enter 2 or 3 letters"
+                invalidIn.setAttribute("style", "color:red")
+                invalidTruth = true;
+                initialLengthCorrect = false;
+                count = 0;
+            }
         }
     });
 
