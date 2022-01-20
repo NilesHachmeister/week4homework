@@ -150,11 +150,6 @@ function checkAnswer() {
             timeLeft = 0;
         }
 
-        // if the user was on the last question they will then be prompet do input their initials by calling the highScoreInput function
-        highScoreInput()
-        // below the highScoreInpuet the page will create and append an outcome element with the callOutcome fuction
-        callOutcome()
-
         // this sets the text of the outcome to be correct or wrong based on how the user answered the question
         if (correctness) {
             outcome.textContent = "Correct!"
@@ -164,6 +159,13 @@ function checkAnswer() {
             timeLeft -= 10;
             outcome.textContent = "Wrong!"
         }
+
+
+        // if the user was on the last question they will then be prompet do input their initials by calling the highScoreInput function
+        highScoreInput()
+        // below the highScoreInpuet the page will create and append an outcome element with the callOutcome fuction
+        callOutcome()
+
 
         // if the user has not reached the last question the callOutcome function will create and append an outcome element and set the text based on how the user answered the question
     } else {
