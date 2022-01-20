@@ -1,105 +1,98 @@
-
+/* this styles both the highscores button and the timer */
 header{
     font-size: 15px;
     color: grey;
 }
 
+/* this aligns the timer to the right hand side of the page inline */
 #timer{
     float: right;
 }
+
+/* this puts the quiz in the middle of screen and asigns everything to the left unless specified differently */
 main{
 padding-left: 35%;
 padding-right: 35%;
 text-align: left;
 }
 
+/*this styles all of the answer options during the quiz */
 .answer-option{
     color: white;
     background-color: purple;
     border-radius: 5px;
-
     width: initial;
     text-align: left;
-   padding: 4px;
-
+    padding: 4px;
 }
 
-
+/* this is a general style for any of the buttons used throughout the page */
 button{
     background-color: purple;
     color: white;
     height: 30px;
 }
 
+/* this puts all of the answers on the lefs side of the page and also gets rid of any styling for the list */
 #answer-list{
     list-style-type: none;
     padding-left: 0;
 }
 
-
+/* this styles the outcome that pops up to tell the user if they got the answer to a question correct or wrong*/
 #outcome{
     color: grey;
     border-top: grey solid 2px;
     padding-top: 10px;
 }
 
+/* this gives a unique style to the initials and score that were most recently saved. */
 .high-score-item {
     background-color: lightgrey;
     font-weight: bold;
 }
 
-
+/* this styles all of the saved highscores */
 ol li{
-    list-style-type: none;
+list-style-type: none;
 margin-top: 10px;
 margin-left: 0;
 font-weight: 100;
 font-size: 15px;
 }
 
+/* this styles the line on the highscore page that says "Highscores" */
 #high-score-list{
     font-weight: bold;
     font-size: 25px;
 }
 
-#new{
-    color: red;
-}
+
+/* this styles the class for the buttons on the highscore page. the geal was to give them left margin */
 .highscore-button{
     margin-left: 25px;
 }
 
-.directions{
-   
+/* this was to give the directions on load a larger font size */
+#directions{
 font-size: 20px;
 }
 
-
+/* this center aligns all of the text for the page shown when the site first loads */
 #open-page{
-
     text-align: center;
 }
 
+/* this was to align the start button to be in the middle below the dirrections */
 #start-button{
-display: block;
+    display: block;
     margin-top: 15px;
     margin-left: 40%;
 }
 
-
+/* this was to give a litte bit of spacing for the shown score on the initials input page */
 #final-score{
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-
-/*
-style highscores and time
-
-style question
-
-style list item answers
-
-style break and "wrong" or "correct" bellow the break
-
-style high scores screen
